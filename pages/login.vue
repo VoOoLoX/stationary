@@ -11,10 +11,12 @@ const submitForm = () => {
 };
 
 const login = async (value: { email: string }) => {
+	const url = useRuntimeConfig().public.URL;
+
 	const { error } = await supabase.auth.signInWithOtp({
 		email: value.email,
 		options: {
-			emailRedirectTo: 'http://localhost:7337/confirm'
+			emailRedirectTo: `http://${url}/confirm`
 		}
 	});
 

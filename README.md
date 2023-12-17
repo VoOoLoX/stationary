@@ -30,6 +30,7 @@ In your `.env` file define following variables:
 ```env
 SUPABASE_URL='{YOUR SUPABASE URL}'
 SUPABASE_KEY='{YOUR SUPABASE KEY}'
+URL='localhost:7337'
 ```
 
 - Start development server
