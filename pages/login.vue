@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { getNode } from '@formkit/core';
+import { customAlphabet } from 'nanoid';
+const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 32);
 
-const supabase = useSupabaseClient();
+const db = useSupabaseClient();
 const user = useSupabaseUser();
 
 const result = ref<{ success: boolean; message: string } | null>(null);
@@ -13,8 +15,32 @@ const submitForm = () => {
 const login = async (value: { email: string }) => {
 	const url = useRuntimeConfig().public.URL;
 
-	const { error } = await supabase.auth.signInWithOtp({
+	const { error } = await db.auth.signInWithOtp({
 		email: value.email,
+		options: {
+			emailRedirectTo: `http://${url}/confirm`
+		}
+	});
+
+	if (error) {
+		result.value = {
+			success: false,
+			message: 'Error sending email, please try again.'
+		};
+	} else {
+		result.value = {
+			success: true,
+			message: 'Email sent, please check your inbox.'
+		};
+	}
+};
+
+const loginAsGuest = async () => {
+	const url = useRuntimeConfig().public.URL;
+
+	const { error } = await db.auth.signUp({
+		email: `${nanoid()}@anon`,
+		password: nanoid(),
 		options: {
 			emailRedirectTo: `http://${url}/confirm`
 		}
@@ -37,7 +63,7 @@ watch(
 	user,
 	() => {
 		if (user.value) {
-			return navigateTo('/');
+			return navigateTo('/', { replace: true });
 		}
 	},
 	{ immediate: true }
@@ -113,6 +139,21 @@ watch(
 				>
 					<p i-material-symbols-mail />
 					<p>Continue with Email</p>
+				</span>
+			</button>
+			<hr border-primary-500 />
+			<button
+				btn-accent
+				place-self-center
+				@click="loginAsGuest"
+			>
+				<span
+					flex
+					items-center
+					gap-2
+				>
+					<p i-material-symbols-gbadge />
+					<p>Continue as Guest</p>
 				</span>
 			</button>
 		</div>

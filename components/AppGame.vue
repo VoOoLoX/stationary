@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePlayer } from '~/composables/usePlayer';
 import type { Database } from '~/types/supabase';
 
 type Player = Database['public']['Tables']['players']['Row'];
@@ -7,28 +8,6 @@ const db = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 const player = shallowRef<Partial<Player>>();
 const inputLength = 8;
-
-const getPlayerOrRegister = async () => {
-	if (user.value) {
-		const { data: existingPlayer } = await db
-			.from('players')
-			.select('id,coins,mouse,keyboard,display,ssd,motherboard,ram,cpu,gpu,prompt')
-			.eq('id', user.value.id)
-			.limit(1)
-			.single();
-		if (existingPlayer) {
-			player.value = existingPlayer as Partial<Player>;
-		} else {
-			const { data: newPlayer } = await db
-				.from('players')
-				.insert({ id: user.value.id })
-				.select('id,coins,mouse,keyboard,display,ssd,motherboard,ram,cpu,gpu,prompt')
-				.limit(1)
-				.single();
-			player.value = newPlayer as Partial<Player>;
-		}
-	}
-};
 
 const input = ref<string[]>([]);
 const inputRefs = ref<HTMLInputElement[]>([]);
@@ -79,7 +58,7 @@ const onInput = (event: Event, index: number) => {
 };
 
 onMounted(async () => {
-	await getPlayerOrRegister();
+	player.value = await usePlayer();
 
 	if (!player.value || !user.value?.id) {
 		return;
@@ -111,7 +90,6 @@ onMounted(async () => {
 
 	onKeyStroke('Enter', () => {
 		if (answer.value !== player.value?.prompt) return;
-
 		submitAnswer();
 	});
 });
