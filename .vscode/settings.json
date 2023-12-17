@@ -1,0 +1,9 @@
+{
+	"files.exclude": {
+		"**/.gitkeep": true,
+		"**/tsconfig.json": true,
+		".npmrc": true,
+		".vscode": true,
+		"bun.lockb": true
+	}
+}
