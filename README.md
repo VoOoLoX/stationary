@@ -1,39 +1,39 @@
-# Nuxt 3 Minimal Starter
+<h1 align='center'>Stationary</h1>
+<h3 align='center'>Typing game</h3>
+<h5 align='center'>Enter in the prompt -> Get bits -> Buy upgrades -> Repeat</h5>
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+<hr/>
 
-## Setup
+<p align='center'><b>Built with</b></p>
+<p align='center'>
+  <img alt="Nuxt 3" src="https://cdn.svgporn.com/logos/nuxt-icon.svg" height="32">
+  <img alt="Supabase" src="https://cdn.svgporn.com/logos/supabase-icon.svg" height="32">
+  <img alt="UnoCSS" src="https://cdn.svgporn.com/logos/unocss.svg" height="32"> 
+</p>
 
-Make sure to install the dependencies:
+![image](assets/image.png)
+
+## Local development
+
+- Install dependencies
 
 ```bash
-# bun
-bun install
+bun i
 ```
 
-## Development Server
+- Set environment variables
 
-Start the development server on `http://localhost:7337`:
+In your `.env` file define following variables:
+`SUPABASE_URL`
+`SUPABASE_KEY`
+
+```env
+SUPABASE_URL='{YOUR SUPABASE URL}'
+SUPABASE_KEY='{YOUR SUPABASE KEY}'
+```
+
+- Start development server
 
 ```bash
-# bun
 bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
